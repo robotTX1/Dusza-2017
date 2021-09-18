@@ -53,6 +53,21 @@ public class User {
         return true;
     }
 
+    public static int passwordToHash(String password) {
+        int result = 0;
+        if(password.length() < PASSWORD_MAX_LENGTH) password += "d".repeat(PASSWORD_MAX_LENGTH - password.length());
+
+        for(char c : password.toCharArray()) {
+            result += c;
+        }
+
+        return result;
+    }
+
+    public Email getEmail(int index) {
+        return emailList.get(index);
+    }
+
     public void addEmail(Email email) {
         emailList.add(email);
     }
