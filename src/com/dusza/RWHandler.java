@@ -1,11 +1,10 @@
 package com.dusza;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -13,24 +12,38 @@ import java.util.*;
 public class RWHandler {
     public static RWHandler single_instance = null;
 
-    Path RWPath;
+    Path rwpath;
+
 
     // constructors
     private RWHandler(Path path) {
-        RWPath = FileSystems.getDefault().getPath("Data");
+        rwpath = path;
     }
 
-    // Methods
+    public synchronized static RWHandler init(Path path) {
+        if (single_instance != null)
+        {
+            // in my opinion this is optional, but for the purists it ensures
+            // that you only ever get the same instance when you call getInstance
+            throw new AssertionError("You already initialized me");
+        }
 
-    public RWHandler getInstance(Path path) {
-        if (single_instance == null)
-            single_instance = new RWHandler(path);
+        single_instance = new RWHandler(path);
+        return single_instance;
+    }
+
+    public RWHandler getInstance() {
+        if(single_instance == null) {
+            throw new AssertionError("You have to call init first");
+        }
 
         return single_instance;
     }
 
+
+    // Methods
     private List<String> readFile(String file){
-        Path path = RWPath.resolve(file);
+        Path path = rwpath.resolve(file);
         List<String> data = new ArrayList<>();
         try(Scanner input = new Scanner(Files.newBufferedReader(path)))
         {
@@ -97,8 +110,8 @@ public class RWHandler {
         return mails;
     }
 
-    public void saveUser(User user) {
-        //
+
+    public void saveNewUser(User user) {
         String line;
         if (Objects.equals(user.getPasswordReminder(), "")) {
             line = "\n" + user.getUsername() + " " + user.getPassword();
@@ -107,16 +120,47 @@ public class RWHandler {
         }
 
         // save the new line to the file
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("adatok.txt", true));
+        Path p = rwpath.resolve("adatok.txt");
+
+        try(BufferedWriter writer = Files.newBufferedWriter(p, StandardOpenOption.APPEND)) {
             writer.append(line);
-            writer.close();
 
         } catch (IOException e) {
             System.out.println("Adatok.txt nem létezik");
         }
+
+        // username.txt létrehozása
+        p = rwpath.resolve(user.getUsername() + ".txt");
+
+        try(BufferedWriter writer = Files.newBufferedWriter(p)) {
+            writer.append("");
+
+        } catch (IOException e) {
+            System.out.println("Adatok.txt nem létezik");
+        }
+
     }
 
+
+    public void saveEmails(User user) {
+        Path p = rwpath.resolve(user.getUsername()+".txt");
+        try(BufferedWriter writer = Files.newBufferedWriter(p)) {
+            for (Email mail : user.getEmailList()) {
+                String line;
+                if (mail.isRead()) {
+                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + mail.getReceivedDate()
+                            + " olvasott";
+                } else {
+
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println(user.getUsername() + ".txt nem létezik");
+        }
+
+
+    }
     // getters & setters
 
 
