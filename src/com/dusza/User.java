@@ -16,7 +16,7 @@ public class User {
     private final String username;
     private final int password;
     private final String passwordReminder;
-    private final List<Email> emailList = new ArrayList<>();
+    private List<Email> emailList = new ArrayList<>();
 
     public User(String username, int password, String passwordReminder) {
         this.username = username;
@@ -75,6 +75,10 @@ public class User {
 
     public String getPasswordReminder() {
         return passwordReminder;
+    }
+
+    public void setEmailList(List<Email> emailList) {
+        this.emailList = emailList;
     }
 
     public List<Email> getEmailList() {
