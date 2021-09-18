@@ -89,16 +89,16 @@ public class RWHandler {
         for (String line : data)
         {
             String[] splt = line.split(" ");
-            // String senderEmailAddress, String object, Date receivedDate, boolean isRead
+            // String senderEmailAddress, String object, String message, Date receivedDate, boolean isRead
 
             try {
                 Date date = new SimpleDateFormat("MM.dd").parse(splt[2]);
 
                 if (Objects.equals(splt[3], "olvasott"))
                 {
-                    mails.add(new Email(splt[0], splt[1], date, true));
+                    mails.add(new Email(splt[0], splt[1], splt[4] ,date, true));
                 } else {
-                    mails.add(new Email(splt[0], splt[1], date, false));
+                    mails.add(new Email(splt[0], splt[1], splt[4], date, false));
                 }
 
             } catch (ParseException e) {
@@ -149,10 +149,13 @@ public class RWHandler {
                 String line;
                 if (mail.isRead()) {
                     line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + mail.getReceivedDate()
-                            + " olvasott";
+                            + " olvasott " + mail.getMessage();
                 } else {
-
+                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + mail.getReceivedDate()
+                            + " olvasatlan " + mail.getMessage();
                 }
+                writer.append(line);
+
             }
 
         } catch (IOException e) {
