@@ -3,9 +3,9 @@ package com.dusza;
 import java.util.Date;
 
 public class Email {
-    private String senderEmailAddress;
-    private String object;
-    private Date receivedDate;
+    private final String senderEmailAddress;
+    private final String object;
+    private final Date receivedDate;
     private boolean isRead;
 
     public Email(String senderEmailAddress, String object, Date receivedDate, boolean isRead) {
@@ -25,6 +25,10 @@ public class Email {
 
     public Date getReceivedDate() {
         return receivedDate;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 
     public boolean isRead() {
