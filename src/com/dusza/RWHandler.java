@@ -20,7 +20,7 @@ public class RWHandler {
         rwpath = path;
     }
 
-    public synchronized static RWHandler init(Path path) {
+    public static RWHandler init(Path path) {
         if (single_instance != null)
         {
             // in my opinion this is optional, but for the purists it ensures
@@ -32,7 +32,7 @@ public class RWHandler {
         return single_instance;
     }
 
-    public RWHandler getInstance() {
+    public static RWHandler getInstance() {
         if(single_instance == null) {
             throw new AssertionError("You have to call init first");
         }
