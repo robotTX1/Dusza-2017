@@ -7,7 +7,7 @@ public class SessionManager {
     public SessionManager() {
     }
 
-    private User getUser(String username) {
+    public User getUser(String username) {
         for(User user : RWHandler.getInstance().getUsers()) {
             if(user.getUsername().equals(username)) {
                 return user;
@@ -31,7 +31,7 @@ public class SessionManager {
         return false;
     }
 
-    public void registerNewUser(String username, String password, String passwordReminder) throws Exception {
+    public boolean registerNewUser(String username, String password, String passwordReminder) {
         User tmp = getUser(username);
 
         if(tmp == null) {
@@ -39,9 +39,9 @@ public class SessionManager {
             RWHandler.getInstance().saveNewUser(newUser);
             currentUser = newUser;
             isLoggedIn = true;
-        } else {
-            throw new Exception(String.format("User %s already exists!", tmp.getUsername()));
+            return true;
         }
+        return false;
     }
 
     public void leaveSession() {
