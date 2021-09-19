@@ -49,7 +49,6 @@ public class CommandLineInterface {
         if(sessionManager.logIn(username, password)) {
             System.out.println("Sikeres bejelentkezés!");
             mainMenu();
-
         } else {
             System.out.println("Felhasználó név/jelszó nem egyezik!");
             List<String> options = new ArrayList<>();
