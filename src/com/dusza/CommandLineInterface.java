@@ -1,6 +1,7 @@
 package com.dusza;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -64,7 +65,7 @@ public class CommandLineInterface {
                 switch (optionNumber) {
                     case "1":
                         logIn();
-                        break;
+                        return true;
                     case "2":
                         User user = sessionManager.getUser(username);
                         if(user == null) System.out.printf("Nincs ilyen regisztrált felhasználó: %s!\n", username);
@@ -135,13 +136,81 @@ public class CommandLineInterface {
         if(sessionManager.registerNewUser(username, password, passwordReminder)) {
             System.out.println("Sikeres regisztráció!");
             sessionManager.logIn(username, password);
-            //TODO interaction menu
+            mainMenu();
         } else {
             System.out.println("Valami baj van, próbáld újra");
             System.out.println("Nyomjon meg egy gombot a menübe visszatéréshez!");
             input.nextLine();
         }
         return true;
+    }
+
+    private boolean sendEmail() {
+        System.out.println("Email küldése");
+        System.out.println("Címzett:");
+
+        String addressee;
+
+        while(true) {
+            try {
+                addressee = input.nextLine().strip();
+
+                if(Email.validateAddressee(addressee)) {
+                    User tmpUser = sessionManager.getUser(addressee.split("@")[0]);
+                    if(tmpUser == null) throw new Exception("Nem létezik ilyen címzett: " + addressee);
+                    break;
+                }
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Tárgy (opcionális)");
+        String object;
+
+        while(true) {
+            try{
+                object = input.nextLine().strip();
+                if(Email.validateObject(object)) break;
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Üzenet");
+        String message;
+
+        while(true) {
+            try{
+                message = input.nextLine().strip();
+                if(Email.validateMessage(message)) break;
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Biztosan elakarja küldeni a levelet?");
+        List<String> optionList = new ArrayList<>();
+        optionList.add("Küldés");
+        printOptions(optionList, false);
+
+        String optionNumber;
+        while(true) {
+            optionNumber = input.nextLine().strip();
+            switch (optionNumber) {
+                case "1" -> {
+                    System.out.println("A levél el lett elküldve.");
+                    Email email = new Email(addressee, object, message, new Date(System.currentTimeMillis()), false);
+                    sessionManager.sendEmail(email);
+                    return true;
+                }
+                case "2" -> {
+                    System.out.println("A levél nem lett elküldve.");
+                    return true;
+                }
+                default -> System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+            }
+        }
     }
 
     private void printOptions(List<String> options, boolean exit) {
@@ -168,25 +237,23 @@ public class CommandLineInterface {
 
         printOptions(options, true);
 
+        boolean rePrintMenu;
+
         String optionNumber;
         while(true) {
             optionNumber = input.nextLine();
+            rePrintMenu = false;
             switch (optionNumber) {
-                case "1":
-                    viewEmails();
-
-                    break;
-                case "2":
-                    // TODO: levél írása
-                    break;
-                case "3":
-                    System.out.print("Köszönjük, hogy a mi alkalmazásunkat válaszotta! Legyen szép napja! \n \n");
-                    start();
+                case "1" -> rePrintMenu = sendEmail();
+                case "2" -> readEmail();
+                case "3" -> {
+                    System.out.print("Kijelentkezés... Legyen szép napja! \n \n");
+                    sessionManager.leaveSession();
                     return;
-                default:
-                    System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
-                    break;
+                }
+                default -> System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
             }
+            if(rePrintMenu) printOptions(options, true);
         }
 
     }
