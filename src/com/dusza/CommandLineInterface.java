@@ -191,12 +191,12 @@ public class CommandLineInterface {
 
     }
 
-    private void viewEmails()
-    {
+    private void viewEmails() {
 
         String sortBy = "";
         System.out.println("Kérem adja meg a beérkező levelek rendezési szempontját:");
         List<String> options = new ArrayList<>();
+        options.add("Nincs rendezés");
         options.add("A küldő email címe");
         options.add("A levél tárgya");
         options.add("A levél érkezési dátuma");
@@ -204,21 +204,25 @@ public class CommandLineInterface {
 
         String optionNumber;
         boolean optionSelected = false;
-        while(! optionSelected) {
+        while (!optionSelected) {
             optionNumber = input.nextLine();
             switch (optionNumber) {
                 case "1":
-                    sortBy = "sender";
+                    sortBy = "";
                     optionSelected = true;
                     break;
                 case "2":
-                    sortBy = "object";
+                    sortBy = "sender";
                     optionSelected = true;
                     break;
                 case "3":
-                    sortBy = "date";
+                    sortBy = "object";
+                    optionSelected = true;
                     break;
                 case "4":
+                    sortBy = "date";
+                    break;
+                case "5":
                     mainMenu();
                     return;
                 default:
@@ -236,15 +240,36 @@ public class CommandLineInterface {
         List<Email> emails = sessionManager.getCurrentUser().getEmailList();
         // sort the list of emails
 
-        for (int i=1; i < emails.size(); i++) {
-            for (int j=0; j<emails.size(); j++) {
-
-            }
+        switch (sortBy) {
+            case "sender":
+                // by sender
+                int n = emails.size();
+                for (int i = n - 1; i > 0; i--) {
+                    for (int j = 0; j < i; j++) {
+                        String addr1 = emails.get(j).getSenderEmailAddress();
+                        String addr2 = emails.get(j + 1).getSenderEmailAddress();
+                        if (addr1.compareTo(addr2) > 0) {
+                            Email tempMail = emails.get(j);
+                            emails.set(j, emails.get(j+1));
+                            emails.set(j+1, tempMail);
+                        }
+                    }
+                }
+                break;
+            case "object":
+                break;
+            case "date":
+                break;
         }
 
+
         options = new ArrayList<>();
-        for (Email mail : sessionManager.getCurrentUser().getEmailList()) {
-            options.add("");
+        for (Email mail : emails) {
+            if (mail.isRead()) {
+                options.add(mail.getSenderEmailAddress() + "\t" + mail.getObject() + "\t" + mail.getReceivedDate() + "\t Olvasott");
+            } else {
+                options.add(mail.getSenderEmailAddress() + "\t" + mail.getObject() + "\t" + mail.getReceivedDate() + "\t Olvasatlan");
+            }
         }
         printOptions(options, false);
 
