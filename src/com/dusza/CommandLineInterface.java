@@ -143,6 +143,28 @@ public class CommandLineInterface {
         return true;
     }
 
+    private void sendEmail() {
+        System.out.println("Email küldése");
+        System.out.println("Címzett:");
+
+        String addressee;
+
+        while(true) {
+            try {
+                addressee = input.nextLine();
+
+                if(Email.validateAddressee(addressee.split("@")[0])) {
+                    User tmpUser = sessionManager.getUser(addressee);
+                    if(tmpUser == null) throw new Exception("Nem létezik ilyen címzett: " + addressee);
+                    break;
+                }
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+    }
+
     private void printOptions(List<String> options, boolean exit) {
         for(int i=0; i<options.size(); i++) {
             System.out.printf("%d. %s\n", i + 1, options.get(i));
