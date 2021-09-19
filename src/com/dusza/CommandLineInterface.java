@@ -331,15 +331,15 @@ public class CommandLineInterface {
                     optionSelected = true;
                     break;
                 case "2":
-                    Collections.sort(emails, (o1, o2) -> o1.getSenderEmailAddress().compareTo(o2.getSenderEmailAddress()));
+                    emails.sort(Comparator.comparing(Email::getSenderEmailAddress));
                     optionSelected = true;
                     break;
                 case "3":
-                    Collections.sort(emails, (o1, o2) -> o1.getObject().compareTo(o2.getObject()));
+                    emails.sort(Comparator.comparing(Email::getObject));
                     optionSelected = true;
                     break;
                 case "4":
-                    Collections.sort(emails, (o1, o2) -> o1.getReceivedDate().compareTo(o2.getReceivedDate()));
+                    emails.sort(Comparator.comparing(Email::getReceivedDate));
                     optionSelected = true;
                     break;
                 case "5":
@@ -353,8 +353,7 @@ public class CommandLineInterface {
         // Levelek kiírása
 
         System.out.println("Kérem válassza ki, hogy melyik e-maillel szeretne műveletet végezni: ");
-        String emptyLine = "#".repeat(50);
-        // 30 + s + 15 + s + 5 + olvasott
+
         int tab = 5;
         String header = "   Küldő " + " ".repeat(30-"Küldő ".length() + tab)
                 + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab)
@@ -394,8 +393,6 @@ public class CommandLineInterface {
                     eoptions.add("Válasz írása");
                     eoptions.add("Törlés");
 
-                    String selectedEmailOption;
-
                     printOptions(eoptions);
 
                     boolean back = false;
@@ -417,7 +414,7 @@ public class CommandLineInterface {
                                 System.out.println("Érkezési dátum: " + date);
                                 System.out.println("Az email tartalma:");
                                 System.out.println(selectedEmail.getMessage());
-                                System.out.println("");
+                                System.out.println();
                                 rePrintEmailSelectedMenu = true;
                             }
                             case "2" -> {
