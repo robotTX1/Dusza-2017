@@ -94,8 +94,8 @@ public class RWHandler {
             for (int i = 4; i < splt.length; i++) {
                 builder.append(splt[i]).append(" ");
             }
-            builder.replace(0,1, "");
-            builder.replace(builder.length()-2, builder.length()-1, "");
+            builder.replace(0,0, "");
+            builder.replace(builder.length()-1, builder.length()-1, "");
             // String senderEmailAddress, String object, String message, Date receivedDate, boolean isRead
 
             try {
