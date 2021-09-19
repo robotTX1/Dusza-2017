@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RWHandler {
+    public static String DATEPATTERN = "MM.dd";
     public static RWHandler single_instance = null;
 
     Path rwpath;
@@ -23,8 +25,6 @@ public class RWHandler {
     public static RWHandler init(Path path) {
         if (single_instance != null)
         {
-            // in my opinion this is optional, but for the purists it ensures
-            // that you only ever get the same instance when you call getInstance
             throw new AssertionError("You already initialized me");
         }
 
@@ -47,7 +47,6 @@ public class RWHandler {
         List<String> data = new ArrayList<>();
         try(Scanner input = new Scanner(Files.newBufferedReader(path)))
         {
-
             while(input.hasNextLine()) {
                 data.add(input.nextLine());
             }
@@ -66,7 +65,6 @@ public class RWHandler {
         for (String line : data)
         {
             String[] splt = line.split(" ");
-            // String username, int password, String passwordReminder
             User tempUser;
             if (splt.length == 2) {
                 tempUser= new User(splt[0], Integer.parseInt(splt[1]), "");
@@ -98,10 +96,11 @@ public class RWHandler {
             String message = builder.toString();
             message = message.replaceAll("\\{", "");
             message = message.replaceAll("\\}", "");
-            // String senderEmailAddress, String object, String message, Date receivedDate, boolean isRead
 
             try {
-                Date date = new SimpleDateFormat("MM.dd").parse(splt[2]);
+                DateFormat formatter = new SimpleDateFormat(DATEPATTERN);
+                Date date = (Date)formatter.parse(splt[2]);
+
                 String sender = splt[0].replace("[kukac]", "@");
 
 
@@ -156,17 +155,12 @@ public class RWHandler {
     public void saveEmails(User user) {
         Path p = rwpath.resolve(user.getUsername()+".txt");
 
-
         try(BufferedWriter writer = Files.newBufferedWriter(p)) {
             for (Email mail : user.getEmailList()) {
                 String line;
 
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(mail.getReceivedDate());
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+                String date = new SimpleDateFormat(DATEPATTERN).format(mail.getReceivedDate());
 
-                String date =  month + "." + day;
                 String message = "{" + mail.getMessage() + "}";
                 String sender = mail.getSenderEmailAddress().replace("@", "[kukac]");
                 if (mail.isRead()) {
@@ -177,17 +171,10 @@ public class RWHandler {
                             + " olvasatlan " + message;
                 }
                 writer.append(line).append("\n");
-
             }
 
         } catch (IOException e) {
             System.out.println(user.getUsername() + ".txt nem létezik");
         }
-
-
     }
-    // getters & setters
-
-
-
 }
