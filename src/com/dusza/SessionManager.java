@@ -52,6 +52,7 @@ public class SessionManager {
     public Email readEmail(int index) {
         Email email = currentUser.getEmail(index);
         email.setRead(true);
+        RWHandler.getInstance().saveEmails(currentUser);
         return email;
     }
 
@@ -71,7 +72,7 @@ public class SessionManager {
     public void sendEmail(String addressee, Email email) {
         User user = getUser(addressee);
         user.addEmail(email);
-        RWHandler.getInstance().saveEmails(currentUser);
+        RWHandler.getInstance().saveEmails(user);
     }
 
     public User getCurrentUser() {

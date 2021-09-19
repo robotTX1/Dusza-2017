@@ -421,7 +421,7 @@ public class CommandLineInterface {
 
                                 System.out.println(date);
                                 System.out.println("Az email tartalma: \n[");
-                                System.out.println(selectedEmail.getMessage().substring(1,selectedEmail.getMessage().length()-2));
+                                System.out.println(selectedEmail.getMessage());
                                 System.out.println("]");
                                 rePrintEmailSelectedMenu = true;
                                 break;

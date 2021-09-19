@@ -94,8 +94,10 @@ public class RWHandler {
             for (int i = 4; i < splt.length; i++) {
                 builder.append(splt[i]).append(" ");
             }
-            builder.replace(0,0, "");
-            builder.replace(builder.length()-1, builder.length()-1, "");
+
+            String message = builder.toString();
+            message = message.replaceAll("\\{", "");
+            message = message.replaceAll("\\}", "");
             // String senderEmailAddress, String object, String message, Date receivedDate, boolean isRead
 
             try {
@@ -105,9 +107,9 @@ public class RWHandler {
 
                 if (Objects.equals(splt[3], "olvasott"))
                 {
-                    mails.add(new Email(sender, splt[1], builder.toString() ,date, true));
+                    mails.add(new Email(sender, splt[1], message ,date, true));
                 } else {
-                    mails.add(new Email(sender, splt[1], builder.toString(), date, false));
+                    mails.add(new Email(sender, splt[1], message, date, false));
                 }
 
             } catch (ParseException e) {
