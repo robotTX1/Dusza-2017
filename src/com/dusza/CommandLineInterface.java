@@ -228,12 +228,12 @@ public class CommandLineInterface {
     }
 
     private void mainMenu() {
-        System.out.println("\nÜdv újra nálunk,"+ sessionManager.getCurrentUser()  + "!");
+        System.out.println("\nÜdv újra nálunk,"+ sessionManager.getCurrentUser().getUsername()  + "!");
         System.out.println("Kérem válasszon az alábbi lehetőségek közül: ");
 
         List<String> options = new ArrayList<>();
-        options.add("Levél írása");
-        options.add("Levelek megtekintése");
+        options.add("Beérkező levelek (levelek olvasása, törlése, rendezése)");
+        options.add("Levélírás");
 
         printOptions(options, true);
 
@@ -258,8 +258,64 @@ public class CommandLineInterface {
 
     }
 
-    private void readEmail()
+    private void viewEmails()
     {
 
+        String sortBy = "";
+        System.out.println("Kérem adja meg a beérkező levelek rendezési szempontját:");
+        List<String> options = new ArrayList<>();
+        options.add("A küldő email címe");
+        options.add("A levél tárgya");
+        options.add("A levél érkezési dátuma");
+        printOptions(options, false);
+
+        String optionNumber;
+        boolean optionSelected = false;
+        while(! optionSelected) {
+            optionNumber = input.nextLine();
+            switch (optionNumber) {
+                case "1":
+                    sortBy = "sender";
+                    optionSelected = true;
+                    break;
+                case "2":
+                    sortBy = "object";
+                    optionSelected = true;
+                    break;
+                case "3":
+                    sortBy = "date";
+                    break;
+                case "4":
+                    mainMenu();
+                    return;
+                default:
+                    System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+                    break;
+            }
+        }
+
+        // Levelek kiírása
+
+        System.out.println("Kérem válassza ki, hogy melyik e-maillel szeretne műveletet végezni: ");
+        String emptyLine = "#".repeat(50);
+        System.out.println("Küldő        Tárgy        Érkezés dátuma        Olvasott/Olvasatlan");
+
+        List<Email> emails = sessionManager.getCurrentUser().getEmailList();
+        // sort the list of emails
+
+        for (int i=1; i < emails.size(); i++) {
+            for (int j=0; j<emails.size(); j++) {
+
+            }
+        }
+
+        options = new ArrayList<>();
+        for (Email mail : sessionManager.getCurrentUser().getEmailList()) {
+            options.add("");
+        }
+        printOptions(options, false);
+
+        optionNumber = "";
     }
+
 }
