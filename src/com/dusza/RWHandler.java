@@ -151,7 +151,6 @@ public class RWHandler {
 
     }
 
-
     public void saveEmails(User user) {
         Path p = rwpath.resolve(user.getUsername()+".txt");
 
