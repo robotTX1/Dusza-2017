@@ -27,7 +27,7 @@ public class CommandLineInterface {
                 case "1" -> rePrintMenu = logIn();
                 case "2" -> rePrintMenu = register();
                 case "3" -> {
-                    System.out.println("Köszönöm, hogy használtad a programot! " + optionNumber);
+                    System.out.println("Köszönöm, hogy használtad a programot!");
                     System.exit(0);
                 }
                 default -> System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
