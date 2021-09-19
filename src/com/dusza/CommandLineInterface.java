@@ -335,15 +335,68 @@ public class CommandLineInterface {
             rePrintMenu = false;
 
             try {
-                int option = Integer.parseInt(optionNumber);
+                int option = Integer.parseInt(optionNumber)-1;
                 if (option < options.size()-1) {
+                    Email selectedEmail = emails.get(option);
+                    System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject() + " kiválasztva.");
+                    List<String> eoptions = new ArrayList<>();
+                    eoptions.add("Megtekintés");
+                    eoptions.add("Válasz írása");
+                    eoptions.add("Törlés");
+
+                    String selectedEmailOption;
+
+                    boolean back = false;
+                    while (! back) {
+                        optionNumber = input.nextLine();
+                        boolean rePrintEmailSelectedMenu = false;
+
+                        switch (optionNumber) {
+                            case "1":
+                                // Email megtekintése
+                                sessionManager.readEmail(option);
+                                System.out.print("-".repeat(50));
+
+                                System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
+
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTime(selectedEmail.getReceivedDate());
+                                int month = cal.get(Calendar.MONTH);
+                                int day = cal.get(Calendar.DAY_OF_MONTH);
+                                String date =  month + "." + day;
+
+                                System.out.println(date);
+                                System.out.println("Az email tartalma: \n {");
+                                System.out.println(selectedEmail.getMessage().substring(1,selectedEmail.getMessage().length()-1));
+                                System.out.println("}");
+                                rePrintEmailSelectedMenu = true;
+                                break;
+                            case "2":
+                                // Emailre válaszolás
+                                break;
+                            case "3":
+                                // Email törtése
+                                sessionManager.deleteEmail(option);
+                                back = true;
+                                break;
+                            case "4":
+                                back = true;
+                                break;
+                            default:
+                                System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+                                break;
+                        }
+
+                    }
 
                 } else {
-
+                    // vissza a mainMenu-be
+                    return true;
                 }
 
             } catch (NumberFormatException e) {
                 System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+                rePrintMenu = true;
             }
 
 
