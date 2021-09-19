@@ -1,5 +1,6 @@
 package com.dusza;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CommandLineInterface {
@@ -362,12 +363,9 @@ public class CommandLineInterface {
 
         options = new ArrayList<>();
         for (Email mail : emails) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(mail.getReceivedDate());
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            // 30 + s + 15 + s + 5 + olvasott
-            String date =  month + "." + day;
+            String date = new SimpleDateFormat(RWHandler.DATEPATTERN).format(mail.getReceivedDate());
+
+
             if (mail.isRead()) {
                 options.add(mail.getSenderEmailAddress() + " ".repeat(30-mail.getSenderEmailAddress().length() + tab)
                         + mail.getObject() + " ".repeat(15-mail.getObject().length() + tab) + date + " ".repeat(5) + "Olvasott");
@@ -414,11 +412,12 @@ public class CommandLineInterface {
 
                                 System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
 
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(selectedEmail.getReceivedDate());
-                                int month = cal.get(Calendar.MONTH);
-                                int day = cal.get(Calendar.DAY_OF_MONTH);
-                                String date =  month + "." + day;
+
+                                String date = new SimpleDateFormat(RWHandler.DATEPATTERN).format(selectedEmail.getReceivedDate());
+//                                Calendar cal = Calendar.getInstance();
+//                                cal.setTime(selectedEmail.getReceivedDate());
+//                                int month = cal.get(Calendar.MONTH);
+//                                int day = cal.get(Calendar.DAY_OF_MONTH);
 
                                 System.out.println(date);
                                 System.out.println("Az email tartalma: \n[");
