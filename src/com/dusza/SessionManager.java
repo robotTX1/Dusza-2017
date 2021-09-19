@@ -50,7 +50,9 @@ public class SessionManager {
     }
 
     public Email readEmail(int index) {
-        return currentUser.getEmail(index);
+        Email email = currentUser.getEmail(index);
+        email.setRead(true);
+        return email;
     }
 
     public Email deleteEmail(int index) {
