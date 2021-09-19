@@ -406,50 +406,50 @@ public class CommandLineInterface {
                         boolean rePrintEmailSelectedMenu = false;
 
                         switch (optionNumber) {
-                            case "1":
+                            case "1" -> {
                                 // Email megtekintése
                                 sessionManager.readEmail(option);
-                                options.get(option).replace("Olvasatlan", "Olvasott");
+                                options.set(option, options.get(option).replace("Olvasatlan", "Olvasott"));
                                 System.out.println("-".repeat(50));
-
                                 System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
-
                                 Calendar cal = Calendar.getInstance();
                                 cal.setTime(selectedEmail.getReceivedDate());
                                 int month = cal.get(Calendar.MONTH);
                                 int day = cal.get(Calendar.DAY_OF_MONTH);
-                                String date =  month + "." + day;
-
+                                String date = month + "." + day;
                                 System.out.println(date);
                                 System.out.println("Az email tartalma: \n[");
                                 System.out.println(selectedEmail.getMessage());
                                 System.out.println("]");
                                 rePrintEmailSelectedMenu = true;
-                                break;
-                            case "2":
+                            }
+                            case "2" -> {
                                 // Emailre válaszolás
                                 answearEmail(selectedEmail);
                                 rePrintEmailSelectedMenu = true;
                                 back = true;
-                                break;
-                            case "3":
+                            }
+                            case "3" -> {
                                 // Email törtése
                                 sessionManager.deleteEmail(option);
                                 options.remove(option);
                                 back = true;
                                 rePrintMenu = true;
-                                break;
-                            case "4":
+                            }
+                            case "4" -> {
                                 back = true;
                                 rePrintMenu = true;
-                                break;
-                            default:
+                            }
+                            default -> {
                                 System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
                                 rePrintEmailSelectedMenu = true;
-                                break;
+                            }
                         }
 
-                        if(rePrintEmailSelectedMenu) printOptions(eoptions, true);
+                        if(rePrintEmailSelectedMenu){
+                            System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject() + " kiválasztva.");
+                            printOptions(eoptions, true);
+                        }
 
                     }
 
@@ -467,7 +467,7 @@ public class CommandLineInterface {
             if(rePrintMenu) {
                 System.out.println(header);
                 printOptions(options, false);
-            };
+            }
         }
 
     }
