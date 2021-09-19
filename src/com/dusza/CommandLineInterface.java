@@ -197,8 +197,8 @@ public class CommandLineInterface {
             switch (optionNumber) {
                 case "1" -> {
                     System.out.println("A levél el lett elküldve.");
-                    Email email = new Email(addressee, object, message, new Date(System.currentTimeMillis()), false);
-                    sessionManager.sendEmail(email);
+                    Email email = new Email(sessionManager.getCurrentUser().getUsername() + "@dusza.hu", object, message, new Date(System.currentTimeMillis()), false);
+                    sessionManager.sendEmail(addressee.split("@")[0],email);
                     return true;
                 }
                 case "2" -> {
@@ -257,7 +257,6 @@ public class CommandLineInterface {
 
     private void answearEmail(Email email) {
         System.out.println("Email válasz küldése erre: " + email.getObject());
-        System.out.println("Címzett:");
 
         String addressee = email.getSenderEmailAddress();
         System.out.println("Címzett: " + addressee);
@@ -297,8 +296,8 @@ public class CommandLineInterface {
             switch (optionNumber) {
                 case "1" -> {
                     System.out.println("A levél el lett elküldve.");
-                    Email tmpEmail = new Email(addressee, object, message, new Date(System.currentTimeMillis()), false);
-                    sessionManager.sendEmail(tmpEmail);
+                    Email tmpEmail = new Email(sessionManager.getCurrentUser().getUsername() + "@dusza.hu", object, message, new Date(System.currentTimeMillis()), false);
+                    sessionManager.sendEmail(addressee.split("@")[0], tmpEmail);
                     return;
                 }
                 case "2" -> {
