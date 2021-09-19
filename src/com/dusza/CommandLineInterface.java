@@ -1,6 +1,7 @@
 package com.dusza;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -234,7 +235,10 @@ public class CommandLineInterface {
 
         System.out.println("Kérem válassza ki, hogy melyik e-maillel szeretne műveletet végezni: ");
         String emptyLine = "#".repeat(50);
-        System.out.println("Küldő        Tárgy        Érkezés dátuma        Olvasott/Olvasatlan");
+        // 30 + s + 15 + s + 5 + olvasott
+        int tab = 5;
+        System.out.println("   Küldő " + " ".repeat(30-"Küldő ".length() + tab)
+                + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab) + "Dátum" + " ".repeat(tab) + "Olvasott/Olvasatlan");
 
         List<Email> emails = sessionManager.getCurrentUser().getEmailList();
         // sort the list of emails
@@ -264,10 +268,18 @@ public class CommandLineInterface {
 
         options = new ArrayList<>();
         for (Email mail : emails) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(mail.getReceivedDate());
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            // 30 + s + 15 + s + 5 + olvasott
+            String date =  month + "." + day;
             if (mail.isRead()) {
-                options.add(mail.getSenderEmailAddress() + "\t" + mail.getObject() + "\t" + mail.getReceivedDate() + "\t Olvasott");
+                options.add(mail.getSenderEmailAddress() + " ".repeat(30-mail.getSenderEmailAddress().length() + tab)
+                        + mail.getObject() + " ".repeat(15-mail.getObject().length() + tab) + date + " ".repeat(5) + "Olvasott");
             } else {
-                options.add(mail.getSenderEmailAddress() + "\t" + mail.getObject() + "\t" + mail.getReceivedDate() + "\t Olvasatlan");
+                options.add(mail.getSenderEmailAddress() + " ".repeat(30-mail.getSenderEmailAddress().length() + tab)
+                        + mail.getObject() + " ".repeat(15-mail.getObject().length() + tab) + date + " ".repeat(5) + "Olvasatlan");
             }
         }
         printOptions(options, false);
