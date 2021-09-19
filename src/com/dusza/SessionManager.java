@@ -56,11 +56,16 @@ public class SessionManager {
     }
 
     public Email deleteEmail(int index) {
-        return currentUser.removeEmail(index);
+        Email ret = currentUser.removeEmail(index);
+        RWHandler.getInstance().saveEmails(currentUser);
+        return ret;
+
     }
 
     public boolean deleteEmail(Email email) {
-        return currentUser.removeEmail(email);
+        boolean ret = currentUser.removeEmail(email);
+        RWHandler.getInstance().saveEmails(currentUser);
+        return ret;
     }
 
     public void sendEmail(Email email) {
