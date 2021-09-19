@@ -261,8 +261,6 @@ public class CommandLineInterface {
 
     private boolean viewEmails()
     {
-
-        String sortBy = "";
         System.out.println("Kérem adja meg a beérkező levelek rendezési szempontját:");
         List<String> options = new ArrayList<>();
         options.add("Nincs rendezés");
@@ -271,25 +269,26 @@ public class CommandLineInterface {
         options.add("A levél érkezési dátuma");
         printOptions(options, false);
 
+        List<Email> emails = sessionManager.getCurrentUser().getEmailList();
+
         String optionNumber;
         boolean optionSelected = false;
         while (!optionSelected) {
             optionNumber = input.nextLine();
             switch (optionNumber) {
                 case "1":
-                    sortBy = "";
                     optionSelected = true;
                     break;
                 case "2":
-                    sortBy = "sender";
+                    // TODO sort by sender
                     optionSelected = true;
                     break;
                 case "3":
-                    sortBy = "object";
+                    // TODO sort by object
                     optionSelected = true;
                     break;
                 case "4":
-                    sortBy = "date";
+                    // TODO sort by date
                     break;
                 case "5":
                     return true;
@@ -306,32 +305,7 @@ public class CommandLineInterface {
         // 30 + s + 15 + s + 5 + olvasott
         int tab = 5;
         System.out.println("   Küldő " + " ".repeat(30-"Küldő ".length() + tab)
-                + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab) + "Dátum" + " ".repeat(tab) + "Olvasott/Olvasatlan");
-
-        List<Email> emails = sessionManager.getCurrentUser().getEmailList();
-        // sort the list of emails
-
-        switch (sortBy) {
-            case "sender":
-                // by sender
-                int n = emails.size();
-                for (int i = n - 1; i > 0; i--) {
-                    for (int j = 0; j < i; j++) {
-                        String addr1 = emails.get(j).getSenderEmailAddress();
-                        String addr2 = emails.get(j + 1).getSenderEmailAddress();
-                        if (addr1.compareTo(addr2) > 0) {
-                            Email tempMail = emails.get(j);
-                            emails.set(j, emails.get(j+1));
-                            emails.set(j+1, tempMail);
-                        }
-                    }
-                }
-                break;
-            case "object":
-                break;
-            case "date":
-                break;
-        }
+                + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab) + "Dátum" + " ".repeat(tab-1) + "Olvasott/Olvasatlan");
 
 
         options = new ArrayList<>();
@@ -352,9 +326,30 @@ public class CommandLineInterface {
         }
         printOptions(options, false);
 
-        optionNumber = "";
 
-        return true;
+        boolean rePrintMenu;
+
+
+        while(true) {
+            optionNumber = input.nextLine();
+            rePrintMenu = false;
+
+            try {
+                int option = Integer.parseInt(optionNumber);
+                if (option < options.size()-1) {
+
+                } else {
+
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+            }
+
+
+            if(rePrintMenu) printOptions(options, true);
+        }
+
     }
 
 }
