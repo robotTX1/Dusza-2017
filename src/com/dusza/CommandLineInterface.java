@@ -228,12 +228,12 @@ public class CommandLineInterface {
     }
 
     private void mainMenu() {
-        System.out.println("\nÜdv újra nálunk,"+ sessionManager.getCurrentUser().getUsername()  + "!");
+        System.out.println("\nÜdv újra nálunk, "+ sessionManager.getCurrentUser().getUsername()  + "!");
         System.out.println("Kérem válasszon az alábbi lehetőségek közül: ");
 
         List<String> options = new ArrayList<>();
-        options.add("Beérkező levelek (levelek olvasása, törlése, rendezése)");
         options.add("Levélírás");
+        options.add("Beérkező levelek (levelek olvasása, törlése, rendezése)");
 
         printOptions(options, true);
 
@@ -245,7 +245,7 @@ public class CommandLineInterface {
             rePrintMenu = false;
             switch (optionNumber) {
                 case "1" -> rePrintMenu = sendEmail();
-                case "2" -> readEmail();
+                case "2" -> rePrintMenu = viewEmails();
                 case "3" -> {
                     System.out.print("Kijelentkezés... Legyen szép napja! \n \n");
                     sessionManager.leaveSession();
@@ -258,7 +258,7 @@ public class CommandLineInterface {
 
     }
 
-    private void viewEmails()
+    private boolean viewEmails()
     {
 
         String sortBy = "";
@@ -286,8 +286,7 @@ public class CommandLineInterface {
                     sortBy = "date";
                     break;
                 case "4":
-                    mainMenu();
-                    return;
+                    return true;
                 default:
                     System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
                     break;
@@ -316,6 +315,8 @@ public class CommandLineInterface {
         printOptions(options, false);
 
         optionNumber = "";
+
+        return true;
     }
 
 }
