@@ -356,9 +356,10 @@ public class CommandLineInterface {
         String emptyLine = "#".repeat(50);
         // 30 + s + 15 + s + 5 + olvasott
         int tab = 5;
-        System.out.println("   Küldő " + " ".repeat(30-"Küldő ".length() + tab)
-                + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab) + "Dátum" + " ".repeat(tab-1) + "Olvasott/Olvasatlan");
-
+        String header = "   Küldő " + " ".repeat(30-"Küldő ".length() + tab)
+                + "Tárgy" + " ".repeat(15-"Tárgy".length() + tab)
+                + "Dátum" + " ".repeat(tab-1) + "Olvasott/Olvasatlan";
+        System.out.println(header);
 
         options = new ArrayList<>();
         for (Email mail : emails) {
@@ -388,7 +389,7 @@ public class CommandLineInterface {
 
             try {
                 int option = Integer.parseInt(optionNumber)-1;
-                if (option < options.size()-1) {
+                if (option < options.size()) {
                     Email selectedEmail = emails.get(option);
                     System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject() + " kiválasztva.");
                     List<String> eoptions = new ArrayList<>();
@@ -397,6 +398,8 @@ public class CommandLineInterface {
                     eoptions.add("Törlés");
 
                     String selectedEmailOption;
+
+                    printOptions(eoptions);
 
                     boolean back = false;
                     while (! back) {
@@ -407,7 +410,7 @@ public class CommandLineInterface {
                             case "1":
                                 // Email megtekintése
                                 sessionManager.readEmail(option);
-                                System.out.print("-".repeat(50));
+                                System.out.println("-".repeat(50));
 
                                 System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
 
@@ -418,26 +421,35 @@ public class CommandLineInterface {
                                 String date =  month + "." + day;
 
                                 System.out.println(date);
-                                System.out.println("Az email tartalma: \n {");
-                                System.out.println(selectedEmail.getMessage().substring(1,selectedEmail.getMessage().length()-1));
-                                System.out.println("}");
+                                System.out.println("Az email tartalma: \n[");
+                                System.out.println(selectedEmail.getMessage().substring(1,selectedEmail.getMessage().length()-2));
+                                System.out.println("]");
                                 rePrintEmailSelectedMenu = true;
                                 break;
                             case "2":
                                 // Emailre válaszolás
+                                answearEmail(selectedEmail);
+                                rePrintEmailSelectedMenu = true;
+                                back = true;
                                 break;
                             case "3":
                                 // Email törtése
                                 sessionManager.deleteEmail(option);
+                                options.remove(option);
                                 back = true;
+                                rePrintMenu = true;
                                 break;
                             case "4":
                                 back = true;
+                                rePrintMenu = true;
                                 break;
                             default:
                                 System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+                                rePrintEmailSelectedMenu = true;
                                 break;
                         }
+
+                        if(rePrintEmailSelectedMenu) printOptions(eoptions, true);
 
                     }
 
@@ -452,7 +464,10 @@ public class CommandLineInterface {
             }
 
 
-            if(rePrintMenu) printOptions(options, true);
+            if(rePrintMenu) {
+                System.out.println(header);
+                printOptions(options, false);
+            };
         }
 
     }
