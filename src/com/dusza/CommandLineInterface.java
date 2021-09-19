@@ -409,6 +409,7 @@ public class CommandLineInterface {
                             case "1":
                                 // Email megtekintése
                                 sessionManager.readEmail(option);
+                                options.get(option).replace("Olvasatlan", "Olvasott");
                                 System.out.println("-".repeat(50));
 
                                 System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
