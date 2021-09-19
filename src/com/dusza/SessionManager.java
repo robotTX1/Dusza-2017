@@ -68,6 +68,9 @@ public class SessionManager {
         RWHandler.getInstance().saveEmails(currentUser);
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     public boolean isLoggedIn() {
         return isLoggedIn;
