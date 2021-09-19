@@ -191,7 +191,7 @@ public class CommandLineInterface {
 
     }
 
-    private void viewEmails() {
+    private boolean viewEmails() {
 
         String sortBy = "";
         System.out.println("Kérem adja meg a beérkező levelek rendezési szempontját:");
@@ -223,8 +223,7 @@ public class CommandLineInterface {
                     sortBy = "date";
                     break;
                 case "5":
-                    mainMenu();
-                    return;
+                    return true;
                 default:
                     System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
                     break;
@@ -274,6 +273,8 @@ public class CommandLineInterface {
         printOptions(options, false);
 
         optionNumber = "";
+
+        return true;
     }
 
 }
