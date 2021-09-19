@@ -93,12 +93,14 @@ public class RWHandler {
 
             try {
                 Date date = new SimpleDateFormat("MM.dd").parse(splt[2]);
+                String sender = splt[0].replace("[kukac]", "@");
+
 
                 if (Objects.equals(splt[3], "olvasott"))
                 {
-                    mails.add(new Email(splt[0], splt[1], splt[4] ,date, true));
+                    mails.add(new Email(sender, splt[1], splt[4] ,date, true));
                 } else {
-                    mails.add(new Email(splt[0], splt[1], splt[4], date, false));
+                    mails.add(new Email(sender, splt[1], splt[4], date, false));
                 }
 
             } catch (ParseException e) {
@@ -157,11 +159,12 @@ public class RWHandler {
 
                 String date =  month + "." + day;
                 String message = "{" + mail.getMessage() + "}";
+                String sender = mail.getSenderEmailAddress().replace("@", "[kukac]");
                 if (mail.isRead()) {
-                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + date
+                    line = sender + " " + mail.getObject() + " " + date
                             + " olvasott " + message;
                 } else {
-                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + date
+                    line = sender + " " + mail.getObject() + " " + date
                             + " olvasatlan " + message;
                 }
                 writer.append(line);
