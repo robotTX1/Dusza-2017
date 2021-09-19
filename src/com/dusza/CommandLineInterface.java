@@ -259,6 +259,61 @@ public class CommandLineInterface {
 
     }
 
+    private void answearEmail(Email email) {
+        System.out.println("Email válasz küldése erre: " + email.getObject());
+        System.out.println("Címzett:");
+
+        String addressee = email.getSenderEmailAddress();
+        System.out.println("Címzett: " + addressee);
+
+        System.out.println("Tárgy (opcionális)");
+        String object;
+
+        while(true) {
+            try{
+                object = input.nextLine().strip();
+                if(Email.validateObject(object)) break;
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Üzenet");
+        String message;
+
+        while(true) {
+            try{
+                message = input.nextLine().strip();
+                if(Email.validateMessage(message)) break;
+            }catch (Exception e) {
+                System.out.println("Hiba: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Biztosan elakarja küldeni a levelet?");
+        List<String> optionList = new ArrayList<>();
+        optionList.add("Küldés");
+        printOptions(optionList, false);
+
+        String optionNumber;
+        while(true) {
+            optionNumber = input.nextLine().strip();
+            switch (optionNumber) {
+                case "1" -> {
+                    System.out.println("A levél el lett elküldve.");
+                    Email tmpEmail = new Email(addressee, object, message, new Date(System.currentTimeMillis()), false);
+                    sessionManager.sendEmail(tmpEmail);
+                    return;
+                }
+                case "2" -> {
+                    System.out.println("A levél nem lett elküldve.");
+                    return;
+                }
+                default -> System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+            }
+        }
+    }
+
     private boolean viewEmails()
     {
 
