@@ -144,15 +144,25 @@ public class RWHandler {
 
     public void saveEmails(User user) {
         Path p = rwpath.resolve(user.getUsername()+".txt");
+
+
         try(BufferedWriter writer = Files.newBufferedWriter(p)) {
             for (Email mail : user.getEmailList()) {
                 String line;
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(mail.getReceivedDate());
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                String date =  month + "." + day;
+                String message = "{" + mail.getMessage() + "}";
                 if (mail.isRead()) {
-                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + mail.getReceivedDate()
-                            + " olvasott " + mail.getMessage();
+                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + date
+                            + " olvasott " + message;
                 } else {
-                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + mail.getReceivedDate()
-                            + " olvasatlan " + mail.getMessage();
+                    line = mail.getSenderEmailAddress() + " " + mail.getObject() + " " + date
+                            + " olvasatlan " + message;
                 }
                 writer.append(line);
 
