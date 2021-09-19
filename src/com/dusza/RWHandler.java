@@ -96,7 +96,6 @@ public class RWHandler {
             }
             builder.replace(0,1, "");
             builder.replace(builder.length()-2, builder.length()-1, "");
-
             // String senderEmailAddress, String object, String message, Date receivedDate, boolean isRead
 
             try {
@@ -175,7 +174,7 @@ public class RWHandler {
                     line = sender + " " + mail.getObject() + " " + date
                             + " olvasatlan " + message;
                 }
-                writer.append(line);
+                writer.append(line).append("\n");
 
             }
 
