@@ -409,14 +409,15 @@ public class CommandLineInterface {
                                 sessionManager.readEmail(option);
                                 options.set(option, options.get(option).replace("Olvasatlan", "Olvasott"));
                                 System.out.println("-".repeat(50));
-                                System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject());
-                              
+                                System.out.println("Küldő: " + selectedEmail.getSenderEmailAddress());
+                                System.out.println("Tárgy: " + selectedEmail.getObject());
+
                                 String date = new SimpleDateFormat(RWHandler.DATEPATTERN).format(selectedEmail.getReceivedDate());
 
-                                System.out.println(date);
-                                System.out.println("Az email tartalma: \n[");
+                                System.out.println("Érkezési dátum: " + date);
+                                System.out.println("Az email tartalma:");
                                 System.out.println(selectedEmail.getMessage());
-                                System.out.println("]");
+                                System.out.println("");
                                 rePrintEmailSelectedMenu = true;
                             }
                             case "2" -> {
@@ -444,7 +445,7 @@ public class CommandLineInterface {
 
                         if(rePrintEmailSelectedMenu){
                             System.out.println(selectedEmail.getSenderEmailAddress() + ":" + selectedEmail.getObject() + " kiválasztva.");
-                            printOptions(eoptions, true);
+                            printOptions(eoptions, false);
                         }
 
                     }
