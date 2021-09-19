@@ -7,7 +7,7 @@ public class Email {
 
     private static final int OBJECT_MAX_LENGTH = 15;
 
-    private static final String MESSAGE_REGEX = "^[a-zA-Z0-9.,;:\\-!?]*$";
+    private static final String MESSAGE_REGEX = "^[a-zA-Z0-9.,;:\\-!? ]*$";
     private static final int MESSAGE_MAX_LENGTH = 100;
 
     private static final String ADDRESSEE_REGEX = "^[a-zA-Z0-9@.]*$";
@@ -45,6 +45,7 @@ public class Email {
 
     public static boolean validateAddressee(String addressee) throws Exception {
         if(addressee == null) throw new Exception("A címzett valahogy null lett :/");
+        if(addressee.isEmpty()) throw new Exception("A címzett nem lehet üres!");
         if(!addressee.contains("@")) throw  new Exception("Érvénytelen címzett, nincs benne @");
         if(!addressee.contains(".")) throw  new Exception("Érvénytelen címzett, nincs benne .");
         if(!addressee.matches(ADDRESSEE_REGEX)) throw  new Exception("A címzett csak az angol ABC betűit, számokat, pontot és kukacot tartalmazhat!");
