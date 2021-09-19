@@ -4,10 +4,13 @@ import java.util.Date;
 
 public class Email {
     private static final String OBJECT_REGEX = "^[a-zA-Z0-9]*$";
+
     private static final int OBJECT_MAX_LENGTH = 15;
 
-    private static final String MESSAGE_REGEX = "^[a-zA-Z0-9.,;:\\-!?]*$";
+    private static final String MESSAGE_REGEX = "^[a-zA-Z0-9.,;:\\-!? ]*$";
     private static final int MESSAGE_MAX_LENGTH = 100;
+
+    private static final String ADDRESSEE_REGEX = "^[a-zA-Z0-9@.]*$";
 
     private final String senderEmailAddress;
     private final String object;
@@ -36,6 +39,16 @@ public class Email {
         if(message == null) throw new Exception("Az üzenet valahogy null lett :/");
         if(message.length() > MESSAGE_MAX_LENGTH) throw new Exception(String.format("Az üzenet nem lehet %d karakternél hoszabb!", MESSAGE_MAX_LENGTH));
         if(!message.matches(MESSAGE_REGEX)) throw  new Exception("Az üzenet csak az angol ABC betűit, számokat és írásjeleket tartalmazhat.");
+
+        return true;
+    }
+
+    public static boolean validateAddressee(String addressee) throws Exception {
+        if(addressee == null) throw new Exception("A címzett valahogy null lett :/");
+        if(addressee.isEmpty()) throw new Exception("A címzett nem lehet üres!");
+        if(!addressee.contains("@")) throw  new Exception("Érvénytelen címzett, nincs benne @");
+        if(!addressee.contains(".")) throw  new Exception("Érvénytelen címzett, nincs benne .");
+        if(!addressee.matches(ADDRESSEE_REGEX)) throw  new Exception("A címzett csak az angol ABC betűit, számokat, pontot és kukacot tartalmazhat!");
 
         return true;
     }
