@@ -68,8 +68,9 @@ public class SessionManager {
         return ret;
     }
 
-    public void sendEmail(Email email) {
-        currentUser.addEmail(email);
+    public void sendEmail(String addressee, Email email) {
+        User user = getUser(addressee);
+        user.addEmail(email);
         RWHandler.getInstance().saveEmails(currentUser);
     }
 
