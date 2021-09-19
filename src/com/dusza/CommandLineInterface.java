@@ -1,10 +1,6 @@
 package com.dusza;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandLineInterface {
     private final Scanner input = new Scanner(System.in);
@@ -324,7 +320,7 @@ public class CommandLineInterface {
         options.add("A levél érkezési dátuma");
         printOptions(options, false);
 
-        List<Email> emails = sessionManager.getCurrentUser().getEmailList();
+        List<Email> emails = new ArrayList<>(sessionManager.getCurrentUser().getEmailList());
 
         String optionNumber;
         boolean optionSelected = false;
@@ -335,15 +331,16 @@ public class CommandLineInterface {
                     optionSelected = true;
                     break;
                 case "2":
-                    // TODO sort by sender
+                    Collections.sort(emails, (o1, o2) -> o1.getSenderEmailAddress().compareTo(o2.getSenderEmailAddress()));
                     optionSelected = true;
                     break;
                 case "3":
-                    // TODO sort by object
+                    Collections.sort(emails, (o1, o2) -> o1.getObject().compareTo(o2.getObject()));
                     optionSelected = true;
                     break;
                 case "4":
-                    // TODO sort by date
+                    Collections.sort(emails, (o1, o2) -> o1.getReceivedDate().compareTo(o2.getReceivedDate()));
+                    optionSelected = true;
                     break;
                 case "5":
                     return true;
