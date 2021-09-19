@@ -49,7 +49,8 @@ public class CommandLineInterface {
 
         if(sessionManager.logIn(username, password)) {
             System.out.println("Sikeres bejelentkezés!");
-            //TODO add interaction menu
+            mainMenu();
+
         } else {
             System.out.println("Felhasználó név/jelszó nem egyezik!");
             List<String> options = new ArrayList<>();
@@ -157,4 +158,40 @@ public class CommandLineInterface {
         printOptions(options, true);
     }
 
+    private void mainMenu() {
+        System.out.println("\nÜdv újra nálunk,"+ sessionManager.getCurrentUser()  + "!");
+        System.out.println("Kérem válasszon az alábbi lehetőségek közül: ");
+
+        List<String> options = new ArrayList<>();
+        options.add("Levél írása");
+        options.add("Levelek megtekintése");
+
+        printOptions(options, true);
+
+        String optionNumber;
+        while(true) {
+            optionNumber = input.nextLine();
+            switch (optionNumber) {
+                case "1":
+                    // TODO: levél írása
+                    break;
+                case "2":
+                    // TODO: levelek megtekintése
+                    break;
+                case "3":
+                    System.out.print("Köszönjük, hogy a mi alkalmazásunkat válaszotta! Legyen szép napja! \n \n");
+                    start();
+                    return;
+                default:
+                    System.out.printf("Nincs ilyen opció: %s\n", optionNumber);
+                    break;
+            }
+        }
+
+    }
+
+    private void readEmail()
+    {
+
+    }
 }
